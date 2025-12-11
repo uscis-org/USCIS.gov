@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Status Results - USCIS</title>
+
+    <!-- tus estilos existentes -->
+    <link rel="stylesheet" href="assets/css/uswds.min.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- estilos necesarios para el encabezado -->
+    <style>
+      :root{
+        --uscis-blue: #0b67b2;
+        --uscis-blue-dark: #084f87;
+        --muted: #6b7280;
+        --page-bg: #f5f7f9;
+        --border: #e6eaef;
+        --radius: 8px;
+      }
+
+      body {
+        background: var(--page-bg) !important;
+        font-family: "Segoe UI", Roboto, Arial, sans-serif;
+        margin:0;
+      }
+
+      /* Encabezado similar a la segunda foto */
+      .site-header {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:16px;
+        background: #ffffff;
+        border-bottom: 1px solid var(--border);
+        padding: 10px 18px;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      /* logo clicable (imagen) */
+      .site-logo-link {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        text-decoration:none;
+      }
+
+      .site-logo {
+        display:block;
+        width: 220px;             /* ajusta tamaño del logo */
+        max-width:32vw;
+        height:auto;
+        object-fit:contain;
+      }
+
+      /* Si prefieres una versión "vertical" más parecida a la foto 2,
+         descomenta las reglas siguientes y ajusta la imagen. */
+      /*
+      .site-header { justify-content:flex-start; padding-left:8px; }
+      .site-logo { width: 56px; transform: rotate(90deg); }
+      */
+
+      /* Texto y enlaces del header al lado derecho */
+      .site-nav {
+        display:flex;
+        gap:12px;
+        align-items:center;
+      }
+      .site-nav a {
+        color: var(--uscis-blue-dark);
+        font-weight:600;
+        text-decoration:none;
+        padding:8px 10px;
+        border-radius:6px;
+      }
+      .site-nav a:hover { background:#f3f6fb; }
+
+      /* pequeño tagline/vertical title (opcional) */
+      .vertical-title {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-weight:700;
+        color:var(--muted);
+        margin-left:6px;
+        display:none; /* mostrar en pantallas grandes si se desea */
+      }
+
+      @media(min-width:1200px){
+        .vertical-title { display:block; }
+      }
+
+      /* Ajustes para móvil */
+      @media(max-width:640px){
+        .site-logo { width:140px; }
+        .site-nav { font-size:14px; }
+      }
+
+      /* === Estilos ya existentes del body (copiados de tu CSS) === */
+      .case-status-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-left: 8px solid var(--uscis-blue);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin: 2rem 0;
+      }
+      /* (el resto de tus estilos ya los mantienes en tu custom.css) */
+
+      /* ======= ESTILOS ADICIONADOS: requisitos + botones ======= */
+      .requirements-box {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 18px;
+        margin-top: 22px;
+        max-width: 100%;
+        box-shadow: 0 2px 6px rgba(16,24,40,0.03);
+      }
+
+      .requirements-box h2 {
+        margin: 0 0 10px;
+        font-size: 1.05rem;
+        color: #111827;
+      }
+
+      .requirement-row {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding: 10px 0;
+        border-top: 1px solid #f3f5f7;
+      }
+      .requirement-row:first-of-type { border-top: none; }
+
+      .requirement-name {
+        display:flex;
+        align-items:center;
+        gap:8px;
+        font-weight:600;
+        color:#111827;
+      }
+      .requirement-note {
+        display:block;
+        font-size:0.9rem;
+        color:var(--muted);
+        font-weight:400;
+      }
+
+      .status-btn {
+        border: none;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight:700;
+        cursor: pointer;
+        min-width:106px;
+        text-align:center;
+        box-shadow: 0 1px 0 rgba(16,24,40,0.04);
+      }
+
+      /* estados visuales */
+      .status-pending {
+        background: #e5e7eb;
+        color: #6b7280;
+      }
+      .status-review {
+        background: #f59e0b;
+        color: #fff;
+      }
+      .status-complete {
+        background: #16a34a;
+        color: #fff;
+      }
+
+      /* pequeño icono dentro del botón (opcional) */
+      .status-icon {
+        display:inline-block;
+        margin-right:8px;
+        font-size:14px;
+        vertical-align:middle;
+      }
+
+      @media(max-width:720px){
+        .requirement-row { flex-direction: column; align-items:flex-start; gap:8px; }
+        .status-btn { width:100%; max-width:240px; }
+      }
+    </style>
+</head>
+<body>
+    <!-- ======= Encabezado nuevo (inserta la imagen que quieras usar) ======= -->
+    <header class="site-header" role="banner">
+      <!-- imagen como enlace --> 
+      <a class="site-logo-link" href="index.html" title="Volver a la página principal">
+        <!-- cambia la ruta por la imagen que usas en la segunda foto -->
+        <img src="imagenes/logos/us.1png.png" alt="USCIS / Verifique el estatus" class="site-logo">
+                <!-- opcional texto al lado del logo -->
+      </a>
+
+      <!-- navegación secundaria (edítala según necesites) -->
+      <nav class="site-nav" aria-label="Principal">
+        <a href="https://www.uscis.gov">Services</a>
+        <a href="index.html">Check Status</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <!-- título vertical opcional (simula la columna lateral de la foto 2) -->
+      <div class="vertical-title" aria-hidden="true">El Estatus de Caso en Línea</div>
+    </header>
+
+    <!-- ======= Resto de tu HTML (sin cambios importantes) ======= -->
+<main id="main-content" class="usa-section">
+<div class="grid-container">
+<div class="grid-row grid-gap">
+
+
+    <h1>Case Status Details</h1>
+
+    <div class="case-status-card">
+      <div class="grid-row">
+
+        <div class="tablet:grid-col-6">
+          <h2>Receipt Number: <span id="receipt-display">IOE1234567890</span></h2>
+
+          <div class="usa-alert usa-alert--success" id="status-alert">
+            <div class="usa-alert__body">
+              <h3 id="status-text">Case Was Approved</h3>
+              <p id="status-description">On March 15, 2024, we approved your Form I-765.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tablet:grid-col-6">
+          <div class="usa-card">
+            <div class="usa-card__body">
+              <h3>Case Details</h3>
+              <dl>
+                <dt>Form Type</dt><dd>I-765</dd>
+                <dt>Service Center</dt><dd>IOE</dd>
+                <dt>Date Received</dt><dd>January 10, 2024</dd>
+                <dt>Date Approved</dt><dd>March 15, 2024</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ====== BLOQUE AÑADIDO: botones de requisitos (puedes editar texto/clases) ====== -->
+    <div class="requirements-box" id="requirementsBox" aria-label="Case requirements">
+      <h2>Case Requirements Status</h2>
+
+      <div class="requirement-row" data-key="receiptVerified">
+        <div class="requirement-name">
+          <span>Receipt Number Verified</span>
+          <small class="requirement-note">(Compruebe que el número de recibo sea válido)</small>
+        </div>
+        <button class="status-btn status-complete" data-state="complete">✓ Completed</button>
+      </div>
+
+      <div class="requirement-row" data-key="evidenceRFE">
+        <div class="requirement-name">
+          <span>Evidence Requirements (RFE)</span>
+          <small class="requirement-note">(Requisitos de evidencia adicionales)</small>
+        </div>
+        <button class="status-btn status-review" data-state="review">⏳ Under Review</button>
+      </div>
+
+      <div class="requirement-row" data-key="feesPaid">
+        <div class="requirement-name">
+          <span>Case Processing Fees</span>
+          <small class="requirement-note">(Pagos y tarifas procesadas)</small>
+        </div>
+        <button class="status-btn status-complete" data-state="complete">✓ Paid</button>
+      </div>
+
+      <div class="requirement-row" data-key="backgroundCheck">
+        <div class="requirement-name">
+          <span>Background Check</span>
+          <small class="requirement-note">(Verificación de antecedentes)</small>
+        </div>
+        <button class="status-btn status-pending" data-state="pending">• Pending</button>
+      </div>
+
+      <div class="requirement-row" data-key="finalDecision">
+        <div class="requirement-name">
+          <span>Final Case Decision</span>
+          <small class="requirement-note">(Decisión final del caso)</small>
+        </div>
+        <button class="status-btn status-pending" data-state="pending">• Pending</button>
+      </div>
+
+      <p style="margin-top:12px;color:var(--muted);font-size:0.9rem;">
+        Haz clic en un botón para cambiar su estado (Pending → Under Review → Completed). El estado se guardará en tu navegador.
+      </p>
+    </div>
+    <!-- ====== FIN BLOQUE AÑADIDO ====== -->
+
+    <!-- resto intacto... -->
+    <section>
+      <h2>Case History</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>Case Approved</h3>
+          <p><strong>March 15, 2024</strong></p>
+          <p>We approved your application.</p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>Request for Evidence Was Received</h3>
+          <p><strong>February 28, 2024</strong></p>
+          <p>We received your RFE response.</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Request for Evidence Sent</h3>
+          <p><strong>February 1, 2024</strong></p>
+          <p>We sent a request for additional evidence.</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Case Was Received</h3>
+          <p><strong>January 10, 2024</strong></p>
+          <p>We received your Form I-765.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Steps (igual) -->
+    <section class="usa-section border-top-1px border-base-light padding-top-3 margin-top-4">
+      <h2>Next Steps</h2>
+      <div class="usa-alert usa-alert--info">
+        <div class="usa-alert__body">
+          <h3 class="usa-alert__heading">What to Expect</h3>
+          <ul>
+            <li>You should receive your Employment Authorization Document (EAD) within 30 days</li>
+            <li>Check your mailing address in your USCIS online account</li>
+            <li>Do not submit multiple inquiries about your card delivery</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-row grid-gap margin-top-2">
+        <div class="tablet:grid-col-6">
+          <div class="usa-card">
+            <div class="usa-card__body">
+              <h3>Update Your Address</h3>
+              <p>If you need to change your address:</p>
+              <a href="https://www.uscis.gov/addresschange" class="usa-button usa-button--outline">Change of Address</a>
+            </div>
+          </div>
+        </div>
+        <div class="tablet:grid-col-6">
+          <div class="usa-card">
+            <div class="usa-card__body">
+              <h3>Get Case Updates</h3>
+              <p>Sign up for automatic case updates:</p>
+              <a href="https://myaccount.uscis.gov/" class="usa-button usa-button--outline">Create Account</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+</div> <!-- .tablet:grid-col-8 -->
+
+<!-- Sidebar -->
+<div class="tablet:grid-col-4">
+  <div class="sticky-card">
+    <div class="usa-card">
+      <div class="usa-card__body">
+        <h3>Contact USCIS</h3>
+        <ul class="usa-list usa-list--unstyled">
+          <li class="padding-bottom-1"><strong>Phone:</strong><br>1-800-375-5283</li>
+          <li class="padding-bottom-1"><strong>TTY:</strong><br>1-800-767-1833</li>
+          <li class="padding-bottom-1"><strong>Online Inquiry:</strong><br><a href="https://egov.uscis.gov/e-request">Submit e-Request</a></li>
+        </ul>
+        <h3 class="margin-top-3">Emergency Requests</h3>
+        <p>For expedited processing or emergency situations:</p>
+        <a href="https://www.uscis.gov/forms/forms-information/how-to-make-an-expedite-request" class="usa-button usa-button--secondary">Expedite Request</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div> <!-- grid-row -->
+</div> <!-- grid-container -->
+</main>
+
+<!-- Footer (mismo que index.html) -->
+
+<script src="assets/js/app.js"></script>
+
+<!-- ======= Script AÑADIDO: controla los clics y guarda en localStorage ======= -->
+<script>
+  (function(){
+    // Estado ciclo: pending -> review -> complete -> pending
+    const nextState = { pending: 'review', review: 'complete', complete: 'pending' };
+
+    // Texto y símbolo por estado (puedes ajustar textos)
+    const stateText = {
+      pending: { text: '• Pending', cls: 'status-pending' },
+      review: { text: '⏳ Under Review', cls: 'status-review' },
+      complete: { text: '✓ Completed', cls: 'status-complete' }
+    };
+
+    // Inicializa botones desde localStorage si hay datos
+    function loadStates() {
+      const rows = document.querySelectorAll('.requirement-row');
+      rows.forEach(row => {
+        const key = row.getAttribute('data-key');
+        const btn = row.querySelector('.status-btn');
+        if (!key || !btn) return;
+        const saved = localStorage.getItem('reqState_' + key);
+        if (saved && stateText[saved]) {
+          applyState(btn, saved);
+        } else {
+          // si no hay guardado, aplica el estado inicial del atributo data-state
+          const initial = btn.getAttribute('data-state') || 'pending';
+          applyState(btn, initial);
+        }
+      });
+    }
+
+    // aplica estilos/texto a un botón según estado
+    function applyState(btn, state) {
+      // quitar clases de estado
+      btn.classList.remove('status-pending','status-review','status-complete');
+      // añadir la clase apropiada
+      btn.classList.add(stateText[state].cls);
+      btn.setAttribute('data-state', state);
+      btn.innerHTML = (state === 'complete' ? '✓ ' : (state === 'review' ? '⏳ ' : '• ')) + stateText[state].text.replace(/^[^ ]+ /,'').trim();
+      // Nota: el texto final será por ejemplo "✓ Completed" o "⏳ Under Review"
+    }
+
+    // guarda estado en localStorage
+    function saveState(key, state) {
+      try {
+        localStorage.setItem('reqState_' + key, state);
+      } catch(e){
+        // si storage no está disponible, lo ignoramos silenciosamente
+      }
+    }
+
+    // agrega listeners para clics (ciclar estados)
+    function initListeners() {
+      const rows = document.querySelectorAll('.requirement-row');
+      rows.forEach(row => {
+        const btn = row.querySelector('.status-btn');
+        const key = row.getAttribute('data-key');
+        if (!btn || !key) return;
+        btn.addEventListener('click', function(){
+          const current = btn.getAttribute('data-state') || 'pending';
+          const next = nextState[current] || 'pending';
+          applyState(btn, next);
+          saveState(key, next);
+        });
+      });
+    }
+
+    // inicializa todo
+    document.addEventListener('DOMContentLoaded', function(){
+      loadStates();
+      initListeners();
+    });
+  })();
+</script>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  document.getElementById('receipt-display').textContent =
+    urlParams.get('receiptNumber') || 'IOE1234567890';
+</script>
+</body>
+</htm

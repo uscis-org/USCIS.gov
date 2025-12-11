@@ -1,0 +1,23 @@
+uscis-exact-replica/
+├── index.html                      # Página principal - Check Case Status
+├── casestatus.html                 # Página de resultados
+├── styles/
+│   ├── uscis-main.css             # Estilos principales de USCIS
+│   ├── uscis-forms.css            # Estilos de formularios
+│   └── uscis-responsive.css       # Responsive design
+├── scripts/
+│   ├── uscis-validation.js        # Validación de receipt numbers
+│   ├── uscis-api.js               # Simulación de API
+│   └── uscis-ui.js                # Interacciones UI
+├── images/
+│   ├── uscis-logo.png
+│   ├── dhs-seal.png
+│   ├── us-flag.png
+│   └── icons/
+│       ├── info-icon.png
+│       ├── warning-icon.png
+│       └── success-icon.png
+├── fonts/                         # Fuentes oficiales de USCIS
+│   ├── SourceSansPro-Regular.ttf
+│   └── Merriweather-Regular.ttf
+└── config.js                      # Configuración de dominios

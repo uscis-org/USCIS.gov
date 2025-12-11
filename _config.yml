@@ -1,0 +1,24 @@
+title: "U.S. Citizenship and Immigration Services"
+description: "Oficial website for immigration services"
+baseurl: ""
+url: "https://usci-sorg-demo.github.io" # Para staging
+# En producción sería: "https://www.uscis.gov"
+
+# USWDS Configuration
+uswds:
+  version: 3.0.0
+  lang: en
+  theme: default
+
+# Jekyll Configuration
+markdown: kramdown
+permalink: pretty
+
+# Navegación
+navigation:
+  - text: "Forms"
+    href: "/forms/"
+  - text: "Check Case Status"
+    href: "/tools/case-status/"
+  - text: "About USCIS"
+    href: "/about/mission/"
